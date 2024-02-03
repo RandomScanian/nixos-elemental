@@ -13,6 +13,9 @@ with lib.randomscanian;
     services = {
       ssh = enabled;
     };
+    hardware = {
+      nvidia = enabled;
+    };
     system = {
       boot = {
         EFI = true;
@@ -31,22 +34,6 @@ with lib.randomscanian;
 
   #TEMP
   networking.firewall.enable = false;
-
-  
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-  };
-  
-  hardware.nvidia = {
-    modesetting.enable = true;
-    open = false;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-    nvidiaSettings = true;
-  };
-  services.xserver.videoDrivers = [ "nvidia" ];
-  
   
   system.stateVersion = "23.11";
 }
