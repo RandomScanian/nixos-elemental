@@ -241,11 +241,11 @@
     "nixos-elemental": {
       "flake": false,
       "locked": {
-        "lastModified": 1706993660,
-        "narHash": "sha256-t8e2D9H5dH+Wvet4mFPGfxpBf2sO+q88pX8cZSpE7Pk=",
+        "lastModified": 1706994730,
+        "narHash": "sha256-KIeUzzFRhMWVzPVZ8UPD6gMOnOaaRaHUWRH8wSp6hF8=",
         "owner": "RandomScanian",
         "repo": "nixos-elemental",
-        "rev": "157a9597aa8a98b173c3b54a1957bb3ac9f0259e",
+        "rev": "07cfae937ec3ff895b1c6d9900cbccb83f0c4bcc",
         "type": "github"
       },
       "original": {
