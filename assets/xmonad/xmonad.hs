@@ -17,10 +17,6 @@ main = do
         { manageHook = myManageHook <+> manageHook defaultConfig -- make sure to include myManageHook definition from above
         , layoutHook = avoidStruts  $  layoutHook defaultConfig
         , terminal = myTerminal
-        , logHook = dynamicLogWithPP xmobarPP
-                        { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "green" "" . shorten 50
-                        }
         , modMask = mod4Mask     -- Rebind Mod to the Windows key
         } `additionalKeys`
         [ ((mod4Mask .|. shiftMask, xK_z), spawn "xscreensaver-command -lock")
