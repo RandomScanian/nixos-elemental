@@ -12,7 +12,7 @@ in
   config = mkIf cfg.enable {
     console.useXkbConfig = true;
     services.xserver = {
-      layout = "us";
+      xkb.layout = "us";
       xkb.variant = "colemak";
       xkb.options = "eurosign:e";
     };

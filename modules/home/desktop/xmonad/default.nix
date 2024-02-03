@@ -9,10 +9,11 @@ in {
   };
 
   config = mkIf cfg.enable {
+    xsession.enable = true;
     xsession.windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
-      #config = "${inputs.nixos-elemental}/assets/xmonad/config.hs";
+      config = "${inputs.nixos-elemental}/assets/xmonad/xmonad.hs";
     };
   };
 }

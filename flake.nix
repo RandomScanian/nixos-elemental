@@ -2,8 +2,7 @@
   description = "My NixOS / nix-darwin / nixos-generators systems";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
-    unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
     snowfall-lib = {
       url = "github:snowfallorg/lib";
@@ -11,7 +10,7 @@
     };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-23.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -19,17 +18,17 @@
 
     nix-ld = {
       url = "github:Mic92/nix-ld";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     flake-checker = {
       url = "github:DeterminateSystems/flake-checker";
-      inputs.nixpkgs.follows = "unstable";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Discord Replugged
     replugged.url = "github:LunNova/replugged-nix-flake";
-    replugged.inputs.nixpkgs.follows = "unstable";
+    replugged.inputs.nixpkgs.follows = "nixpkgs";
 
     # Discord Replugged plugins / themes
     discord-tweaks = {
@@ -40,8 +39,7 @@
     #TODO: setup secrets
     sops = {
       url = "github:Mic92/sops-nix";
-      inputs.nixpkgs.follows = "unstable";
-      inputs.nixpkgs-stable.follows = "nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     #Dracula theming
@@ -51,6 +49,12 @@
     };
     dracula-rofi = {
       url = "github:dracula/rofi";
+      flake = false;
+    };
+
+    #DistroTube Xmonad
+    distrotube = {
+      url = "gitlab:dwt1/dotfiles";
       flake = false;
     };
     

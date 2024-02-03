@@ -11,6 +11,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.xserver.windowManager.xmonad = {
+      enable = true;
+      enableContribAndExtras = true;
+    };
     randomscanian = {
       gui-apps = {
         rofi = enabled;

@@ -12,7 +12,7 @@ in {
     programs.alacritty = {
       enable = true;
       settings = {
-        import = [ "${inputs.dracula-alacritty}/theming/dracula.toml" ];
+        import = [ "${inputs.dracula-alacritty}/dracula.toml" ];
         window.opacity = 0.9;
         font = {
           normal = {
