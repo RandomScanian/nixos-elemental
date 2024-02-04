@@ -15,19 +15,23 @@ in
 
   config = {
     randomscanian.system.home.extraOptions = {
+      programs.home-manager = enabled;
       home.stateVersion = config.system.stateVersion;
       home.file = mkAliasDefinitions options.randomscanian.system.home.file;
-      programs.home-manager = enabled;
       xdg.enable = true;
       xdg.configFile = mkAliasDefinitions options.randomscanian.system.home.configFile;
-      #home.username = config.randomscanian.system.user.name;
-      #home.homeDirectory = "/home/${config.randomscanian.system.user.name}";
+      home.username = "${config.randomscanian.system.user.name}";
+      home.homeDirectory = "/home/${config.randomscanian.system.user.name}";
     };
 
     home-manager = {
       useUserPackages = true;
       useGlobalPkgs = true;
 
+      users.root = {
+        home.stateVersion = config.system.stateVersion;
+      };
+      
       users.${config.randomscanian.system.user.name} =
         mkAliasDefinitions options.randomscanian.system.home.extraOptions;
     };

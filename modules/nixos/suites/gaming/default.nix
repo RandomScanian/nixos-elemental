@@ -11,7 +11,6 @@ in
 
   config = mkIf cfg.enable {
     randomscanian = {
-      doukutsu-rs = enabled;
     };
   };
 }

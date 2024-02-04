@@ -13,7 +13,7 @@ in {
       enable = true;
       settings = {
         import = [ "${inputs.dracula-alacritty}/dracula.toml" ];
-        window.opacity = 0.9;
+        window.opacity = 1;
         font = {
           normal = {
             family = "JetBrainsMono Nerd Font";
