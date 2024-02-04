@@ -1,0 +1,143 @@
+import XMonad
+import Data.Monoid
+import System.Exit
+
+
+-- Layout modifiers
+import XMonad.Layout.Spacing
+import XMonad.Layout.LayoutModifier
+import XMonad.Layout.Gaps ( Gaps )
+import XMonad.Layout.IfMax ( IfMax(..) )
+import XMonad.Layout.Named( named )
+import XMonad.Layout.NoBorders( noBorders , smartBorders)
+import XMonad.Layout.Fullscreen ( fullscreenFull )
+
+-- Layouts
+import XMonad.Layout.BinarySpacePartition ( emptyBSP )
+import XMonad.Layout.ResizableTile ( ResizableTall(..) )
+import XMonad.Layout.SimpleFloat( simpleFloat )
+
+-- Hooks
+import XMonad.Hooks.ManageDocks ( avoidStruts )
+
+import Theme.Gaps ( gaps , spacing)
+
+import qualified XMonad.StackSet as W
+import qualified Data.Map        as M
+
+
+colorScheme = "dracula"
+
+colorBack = "#282a36"
+colorFore = "#f8f8f2"
+
+color01="#000000"
+color02="#ff5555"
+color03="#50fa7b"
+color04="#f1fa8c"
+color05="#bd93f9"
+color06="#ff79c6"
+color07="#8be9fd"
+color08="#bfbfbf"
+color09="#4d4d4d"
+color10="#ff6e67"
+color11="#5af78e"
+color12="#f4f99d"
+color13="#caa9fa"
+color14="#ff92d0"
+color15="#9aedfe"
+color16="#e6e6e6"
+
+myModMask :: KeyMask
+myModMask = mod4Mask      
+
+myBorderWidth :: Dimension
+myBorderWidth = 2         
+
+myNormalBorderColor :: String     
+myNormalBorderColor   = colorBack 
+       
+myFocusedBorderColor :: String    
+myFocusedBorderColor  = color15
+
+myFocusFollowsMouse :: Bool
+myFocusFollowsMouse = True
+
+space :: l a -> ModifiedLayout Gaps (ModifiedLayout Spacing l) a
+space = gaps . spacing
+
+myWorkspaces = [" www ", " chat ", " game ", " launcher ", " dev ", " else ", " else ", " else ", " Away "]
+myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..]
+
+myKeys conf@(XConfig {XMonad.modMask = modm}) = M.fromList $
+
+    [ ((modm,               xK_p     ), spawn "exe=`dmenu_path | dmenu` && eval \"exec $exe\"")
+    , ((modm .|. shiftMask, xK_c     ), kill)
+    , ((modm,               xK_space ), sendMessage NextLayout)
+    , ((modm .|. shiftMask, xK_space ), setLayout $ XMonad.layoutHook conf)
+    , ((modm,               xK_n     ), refresh)
+    , ((modm,               xK_Tab   ), windows W.focusDown)
+    , ((modm,               xK_j     ), windows W.focusDown)
+    , ((modm,               xK_k     ), windows W.focusUp  )
+    , ((modm,               xK_m     ), windows W.focusMaster  )
+    , ((modm,               xK_Return), windows W.swapMaster)
+    , ((modm .|. shiftMask, xK_j     ), windows W.swapDown  )
+    , ((modm .|. shiftMask, xK_k     ), windows W.swapUp    )
+    , ((modm,               xK_h     ), sendMessage Shrink)
+    , ((modm,               xK_l     ), sendMessage Expand)
+    , ((modm,               xK_t     ), withFocused $ windows . W.sink)
+    , ((modm              , xK_comma ), sendMessage (IncMasterN 1))
+    , ((modm              , xK_period), sendMessage (IncMasterN (-1)))
+    -- , ((modm              , xK_b     ), sendMessage ToggleStruts)
+    , ((modm .|. shiftMask, xK_q     ), io (exitWith ExitSuccess))
+    , ((modm              , xK_q     ), spawn "xmonad --recompile; xmonad --restart")
+    ]
+    ++
+    [((m .|. modm, k), windows $ f i)
+        | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+        , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
+
+myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
+    [ ((modm, button1), (\w -> focus w >> mouseMoveWindow w
+                                       >> windows W.shiftMaster))
+    , ((modm, button2), (\w -> focus w >> windows W.shiftMaster))
+    , ((modm, button3), (\w -> focus w >> mouseResizeWindow w
+                                       >> windows W.shiftMaster))
+    ]
+
+myLayout = tiled ||| Mirror tiled ||| Full
+  where
+    -- default tiling algorithm partitions the screen into two panes
+    tiled   = Tall nmaster delta ratio
+
+    -- The default number of windows in the master pane
+    nmaster = 1
+
+    -- Default proportion of screen occupied by master pane
+    ratio   = 1/2
+
+    -- Percent of screen to increment by when resizing panes
+    delta   = 1/100
+
+layout = avoidStruts . smartBorders $ layouts
+ where
+  full = named "Fullscreen" $ noBorders (fullscreenFull Full)
+  bsp  = named "Binary Partition" $ IfMax 1 simpleFloat $ space emptyBSP
+  tall = named "Tall" $ IfMax 1 full $ space $ ResizableTall 1 (1 / 100) (1 / 2) []
+  layouts = bsp ||| full ||| tall
+
+main = xmonad defaults
+
+defaults = defaultConfig {
+        focusFollowsMouse  = myFocusFollowsMouse,
+        borderWidth        = myBorderWidth,
+        modMask            = myModMask,
+        workspaces         = myWorkspaces,
+        normalBorderColor  = myNormalBorderColor,
+        focusedBorderColor = myFocusedBorderColor,
+        
+        keys               = myKeys,
+        mouseBindings      = myMouseBindings,
+
+        layoutHook         = layout
+    }

@@ -10,7 +10,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.networkmanager.enable = true;
-    networking.resolvconf.dnsExtensionMechanism = false;
+    networking = {
+      networkmanager.enable = true;
+      resolvconf.dnsExtensionMechanism = false;
+      nameservers = [ "8.8.8.8" "1.1.1.1" ];
+    };
   };
 }

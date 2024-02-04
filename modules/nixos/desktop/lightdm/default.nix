@@ -14,9 +14,6 @@ in
   config = mkIf cfg.enable {
     services.xserver = {
       enable = true;
-      desktopManager = {
-        xfce = enabled;
-      };
       displayManager.lightdm = {
         enable = true;
         greeters.gtk = mkIf gtkcfg.enable {

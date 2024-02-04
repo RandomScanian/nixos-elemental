@@ -15,6 +15,11 @@ in
         common = enabled;
         desktop = enabled;
       };
+      hardware = {
+        audio = enabled;
+        network = enabled;
+        storage = enabled;
+      };
       system = {
         kbd = enabled;
         time = enabled;
