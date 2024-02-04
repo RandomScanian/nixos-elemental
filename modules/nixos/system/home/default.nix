@@ -20,6 +20,8 @@ in
       programs.home-manager = enabled;
       xdg.enable = true;
       xdg.configFile = mkAliasDefinitions options.randomscanian.system.home.configFile;
+      #home.username = config.randomscanian.system.user.name;
+      #home.homeDirectory = "/home/${config.randomscanian.system.user.name}";
     };
 
     home-manager = {

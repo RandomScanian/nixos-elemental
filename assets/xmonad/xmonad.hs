@@ -30,10 +30,7 @@ import XMonad.Hooks.ManageDocks (avoidStruts, docks, manageDocks, ToggleStruts(.
 import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat, doCenterFloat)
 import XMonad.Hooks.ServerMode
 import XMonad.Hooks.SetWMName
-import XMonad.Hooks.StatusBar
-import XMonad.Hooks.StatusBar.PP
-import XMonad.Hooks.WindowSwallowing
-import XMonad.Hooks.WorkspaceHistory
+import XMonad.Hooks.InsertPosition
 
 -- Layouts
 import XMonad.Layout.SimplestFloat
@@ -191,6 +188,7 @@ myManageHook = composeAll
   , className =? "Gimp"            --> doShift ( myWorkspaces !! 8 )
   , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
   , isFullscreen -->  doFullFloat
+  , fmap not willFloat --> insertPosition Below Newer
   ]
 
 subtitle' ::  String -> ((KeyMask, KeySym), NamedAction)

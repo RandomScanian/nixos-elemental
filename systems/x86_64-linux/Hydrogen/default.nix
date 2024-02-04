@@ -10,6 +10,12 @@ with lib.randomscanian;
       desktop = enabled;
       gaming = enabled;
     };
+    cli-apps = {
+      just = enabled;
+    };
+    gui-apps = {
+      doukutsu-rs = enabled;
+    };
     services = {
       ssh = enabled;
     };
