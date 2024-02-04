@@ -57,7 +57,16 @@
       url = "gitlab:dwt1/dotfiles";
       flake = false;
     };
-    
+
+    #Betterfox
+    betterfox = {
+      url = "github:yokoffing/Betterfox";
+      flake = false;
+    };
+
+    #Nur
+    nur.url = "github:nix-community/NUR";
+      
     #Self
     nixos-elemental = {
       url = "github:RandomScanian/nixos-elemental";
@@ -86,14 +95,17 @@
         permittedInsecurePackages = [];
       };
 
-      overlays = with inputs; [];
+      overlays = with inputs; [
+      ];
 
       systems.modules.nixos = with inputs; [
         home-manager.nixosModules.home-manager
-        nix-ld.nixosModules.nix-ld
         {
-          environment.etc."dracula-rofi".source = "${inputs.dracula-rofi}";
+          home-manager.sharedModules = [
+            inputs.nur.hmModules.nur
+          ];
         }
+        nix-ld.nixosModules.nix-ld
       ];
     };
 }

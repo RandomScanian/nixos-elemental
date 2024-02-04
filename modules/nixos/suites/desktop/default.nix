@@ -14,6 +14,7 @@ in
       gui-apps = {
         alacritty = enabled;
         discord = enabled;
+        firefox = enabled;
         bitwarden = enabled;
       };
       desktop = {
