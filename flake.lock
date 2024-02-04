@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "betterfox": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1706639358,
+        "narHash": "sha256-9vwCLXQIXT7fYrpAuX9KP/TSByGUL/aL/olPzqIY8Ao=",
+        "owner": "yokoffing",
+        "repo": "Betterfox",
+        "rev": "27bcd885b7c7c97e6e2291559c38f686f60d35a8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "yokoffing",
+        "repo": "Betterfox",
+        "type": "github"
+      }
+    },
     "crane": {
       "inputs": {
         "flake-compat": [
@@ -301,6 +317,21 @@
         "type": "github"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1707043111,
+        "narHash": "sha256-d3tdmq/3+SE4mJ4STVlInkAdQ64wz4V4jVEr78AEoak=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "51b44c67a6d45183f55b79a5d691d2093b2a046e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "replugged": {
       "inputs": {
         "nixpkgs": [
@@ -340,6 +371,7 @@
     },
     "root": {
       "inputs": {
+        "betterfox": "betterfox",
         "discord-tweaks": "discord-tweaks",
         "distrotube": "distrotube",
         "dracula-alacritty": "dracula-alacritty",
@@ -350,6 +382,7 @@
         "nixos-elemental": "nixos-elemental",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
+        "nur": "nur",
         "replugged": "replugged",
         "snowfall-lib": "snowfall-lib",
         "sops": "sops"

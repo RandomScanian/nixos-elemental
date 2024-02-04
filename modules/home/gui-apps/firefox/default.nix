@@ -4,21 +4,19 @@ with lib.randomscanian;
 let
   cfg = config.randomscanian.gui-apps.firefox;
 in {
-  options.randomscanian.gui-apps.firefox = {
+  options.randomscanian.gui-apps.firefox = with types; {
     enable = mkEnableOption "Whether or not to enable custom Firefox config.";
     verticalTabs = mkBoolOpt true "Whether or not to enable vertical tabs.";
     extraConfig = mkOpt str "" "Extra configuration for the user profile JS file.";
     userChrome = mkOpt str "" "Extra configuration for the user chrome CSS file.";
-    settings = mkOpt attrs defaultSettings "Settings to apply to the profile.";
+    settings = mkOpt attrs {} "Settings to apply to the profile.";
   };
-
+  
   config = mkIf cfg.enable {
-    imports = [ ./firefox-search.nix ];
     programs.firefox = {
       enable = true;
 
       profiles.${config.randomscanian.user.name} = {
-        inherit (cfg) extraConfig userChrome settings;
         id = 0;
         name = config.randomscanian.user.name;
         bookmarks = [
@@ -72,7 +70,7 @@ in {
           "general.smoothScroll" = true;
           "general.autoscroll" = true;
           "browser.tabs.firefox-view" = false;
-        };
+        } ++ cfg.settings;
         extraConfig = ''
              user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
              user_pref("full-screen-api.ignore-widgets", true);
@@ -80,12 +78,12 @@ in {
              user_pref("media.rdd-vpx.enabled", true);
              user_pref(browser.sessionstore.max_windows_undo, 20);
             ${builtins.readFile "${inputs.assets}/Betterfox/user.js"}
-          '';
+          '' ++ cfg.extraConfig;
         userChrome = ''
             #TabsToolbar{ visibility: collapse !important }
-          '';
-        userContent = "";
+          '' ++ cfg.userChrome;
+        #userContent = "";
       };
     };
-  };
+  } // (builtins.readFile ./firefox-seach.nix);
 }
