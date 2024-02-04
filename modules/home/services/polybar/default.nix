@@ -21,7 +21,7 @@ in {
           monitor = "\${env:MONITOR:DP-0}";
           width = "100%";
           height = "2%";
-          font-0 = "JetBrainsMono Nerd Font:pixelsize=10;0";
+          font-0 = "JetBrainsMono Nerd Font:pixelsize=10;antialias=true;0";
           radius = 0;
           modules-left = "";
           modules-center = "date";
@@ -30,9 +30,9 @@ in {
         "module/date" = {
           type = "internal/date";
           internal = 0;
-          date = "%Y/[%b:%m]/[%W]/[%a:%e:%u]";
-          time = "%T";
-          label = "%date%  %time%";
+          date = "%Y/[%b:%m]/[%W]/[%a:%u:%d]";
+          time = "%T %Z";
+          label = "%date% %time%";
         };
       };
       script = "polybar top &";

@@ -20,7 +20,55 @@ in {
         
         id = 0;
         name = config.home.username;
+
+	extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+          ublock-origin
+          bitwarden
+          sponsorblock
+          privacy-badger
+          dracula-dark-colorscheme
+          darkreader
+          sidebery
+          tab-counter-plus
+          honey
+          return-youtube-dislikes
+          fastforwardteam
+          youtube-shorts-block
+        ];
         
+        extraConfig = ''
+             user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+             user_pref("full-screen-api.ignore-widgets", true);
+             user_pref("media.ffmpeg.vaapi.enabled", true);
+             user_pref("media.rdd-vpx.enabled", true);
+             user_pref(browser.sessionstore.max_windows_undo, 20);
+             ${builtins.readFile "${inputs.betterfox}/user.js"}
+	     user_pref("apz.overscroll.enabled", true); // DEFAULT NON-LINUX
+	     user_pref("general.smoothScroll", true); // DEFAULT
+	     user_pref("general.smoothScroll.msdPhysics.continuousMotionMaxDeltaMS", 12);
+	     user_pref("general.smoothScroll.msdPhysics.enabled", true);
+	     user_pref("general.smoothScroll.msdPhysics.motionBeginSpringConstant", 600);
+	     user_pref("general.smoothScroll.msdPhysics.regularSpringConstant", 650);
+	     user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaMS", 25);
+	     user_pref("general.smoothScroll.msdPhysics.slowdownMinDeltaRatio", 2.0);
+	     user_pref("general.smoothScroll.msdPhysics.slowdownSpringConstant", 250);
+	     user_pref("general.smoothScroll.currentVelocityWeighting", 1.0);
+	     user_pref("general.smoothScroll.stopDecelerationWeighting", 1.0);
+	     user_pref("mousewheel.default.delta_multiplier_y", 300); // 250-400; adjust this number to your liking
+          '' + cfg.extraConfig;
+        
+        settings = {
+          "general.smoothScroll" = true;
+          "general.autoscroll" = true;
+          "browser.tabs.firefox-view" = false;
+        } // cfg.settings;
+        
+        userChrome = ''
+          #TabsToolbar{ visibility: collapse !important }
+        '' + cfg.userChrome;
+        
+        #userContent = "";
+
         bookmarks = [
           {
             name = "Nix sites";
@@ -151,43 +199,6 @@ in {
             
           };
         };
-        
-        extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
-          ublock-origin
-          bitwarden
-          sponsorblock
-          privacy-badger
-          dracula-dark-colorscheme
-          darkreader
-          sidebery
-          tab-counter-plus
-          honey
-          return-youtube-dislikes
-          fastforwardteam
-          youtube-shorts-block
-        ];
-        
-        extraConfig = ''
-             user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
-             user_pref("full-screen-api.ignore-widgets", true);
-             user_pref("media.ffmpeg.vaapi.enabled", true);
-             user_pref("media.rdd-vpx.enabled", true);
-             user_pref(browser.sessionstore.max_windows_undo, 20);
-            ${builtins.readFile "${inputs.betterfox}/user.js"}
-          '' + cfg.extraConfig;
-        
-        settings = {
-          "general.smoothScroll" = true;
-          "general.autoscroll" = true;
-          "browser.tabs.firefox-view" = false;
-        } // cfg.settings;
-        
-        userChrome = ''
-          #TabsToolbar{ visibility: collapse !important }
-        '' + cfg.userChrome;
-        
-        #userContent = "";
-        
       };
     };
   };

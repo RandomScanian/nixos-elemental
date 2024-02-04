@@ -64,13 +64,19 @@
       flake = false;
     };
 
+    #Comma
+    comma = {
+      url = "github:nix-community/comma";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    
     #Nur
     nur.url = "github:nix-community/NUR";
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-      
+
     #Self
     nixos-elemental = {
       url = "github:RandomScanian/nixos-elemental";
@@ -100,16 +106,18 @@
       };
 
       overlays = with inputs; [
+        nur.overlay
       ];
 
-      systems.modules.nixos = with inputs; [
-        home-manager.nixosModules.home-manager
+      systems.modules.nixos = [
+	inputs.nix-ld.nixosModules.nix-ld
+	inputs.sops-nix.nixosModules.sops
+        inputs.home-manager.nixosModules.home-manager
         {
           home-manager.sharedModules = [
             inputs.nur.hmModules.nur
           ];
         }
-        nix-ld.nixosModules.nix-ld
       ];
     };
 }

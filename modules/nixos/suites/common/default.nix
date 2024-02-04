@@ -13,11 +13,13 @@ in
     randomscanian = {
       cli-apps = {
         just = enabled;
+	tldr = enabled;
         tmux = enabled;
         fd = enabled;
         fzf = enabled;
         ripgrep = enabled;
         eza = enabled;
+	git = enabled;
       };
     };
   };

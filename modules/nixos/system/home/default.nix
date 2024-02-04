@@ -19,6 +19,7 @@ in
       home.stateVersion = config.system.stateVersion;
       home.file = mkAliasDefinitions options.randomscanian.system.home.file;
       xdg.enable = true;
+      xdg.userDirs.createDirectories = true;
       xdg.configFile = mkAliasDefinitions options.randomscanian.system.home.configFile;
       home.username = "${config.randomscanian.system.user.name}";
       home.homeDirectory = "/home/${config.randomscanian.system.user.name}";
@@ -30,6 +31,9 @@ in
 
       users.root = {
         home.stateVersion = config.system.stateVersion;
+      	xdg.enable = true;
+      	xdg.userDirs.createDirectories = true;
+	programs.home-manager = enabled;
       };
       
       users.${config.randomscanian.system.user.name} =

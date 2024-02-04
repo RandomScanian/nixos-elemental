@@ -16,6 +16,5 @@ in
     randomscanian.system.home.extraOptions = {
       randomscanian.cli-apps.fish = enabled;
     };
-    programs.nix-index.enableFishIntegration = mkIf config.programs.nix-index.enable;
   };
 }

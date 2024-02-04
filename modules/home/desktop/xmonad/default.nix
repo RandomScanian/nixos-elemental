@@ -13,8 +13,7 @@ in {
     xsession.windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
-      #config = "${inputs.nixos-elemental}/assets/xmonad/xmonad.hs";
-      config = ../../../../assets/xmonad/xmonad.hs;
+      config = "${inputs.nixos-elemental}/assets/xmonad/xmonad.hs";
     };
   };
 }
