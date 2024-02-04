@@ -10,7 +10,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    randomscanian.cli-apps.pulsemixer = true;
+    randomscanian.cli-apps.pulsemixer = enabled;
     security.rtkit.enable = true;
     services.pipewire = {
       enable = true;
