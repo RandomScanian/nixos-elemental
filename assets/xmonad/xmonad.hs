@@ -283,19 +283,6 @@ myKeys c =
   , ("M-=", addName "Increase max # of windows for layout"   $ increaseLimit)
   , ("M--", addName "Decrease max # of windows for layout"   $ decreaseLimit)]
 
-  -- Sublayouts
-  -- This is used to push windows to tabbed sublayouts, or pull them out of it.
-  ^++^ subKeys "Sublayouts"
-  [ ("M-C-h", addName "pullGroup L"           $ sendMessage $ pullGroup L)
-  , ("M-C-l", addName "pullGroup R"           $ sendMessage $ pullGroup R)
-  , ("M-C-k", addName "pullGroup U"           $ sendMessage $ pullGroup U)
-  , ("M-C-j", addName "pullGroup D"           $ sendMessage $ pullGroup D)
-  , ("M-C-m", addName "MergeAll"              $ withFocused (sendMessage . MergeAll))
-  , ("M-C-u", addName "UnMerge"               $ withFocused (sendMessage . UnMerge))
-  , ("M-C-/", addName "UnMergeAll"            $  withFocused (sendMessage . UnMergeAll))
-  , ("M-C-.", addName "Switch focus next tab" $  onGroup W.focusUp')
-  , ("M-C-,", addName "Switch focus prev tab" $  onGroup W.focusDown')]
-
 main :: IO ()
 main = do
   xmonad $ docks $ def

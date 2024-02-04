@@ -19,7 +19,6 @@ in
       };
       desktop = {
         gtk = enabled;
-        lightdm = enabled;
       };
     };
   };

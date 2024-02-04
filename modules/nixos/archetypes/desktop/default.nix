@@ -15,6 +15,10 @@ in
         common = enabled;
         desktop = enabled;
       };
+      desktop = {
+        xmonad = enabled;
+        lightdm = enabled;
+      };
       hardware = {
         audio = enabled;
         network = enabled;

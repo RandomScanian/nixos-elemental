@@ -13,9 +13,13 @@ in
   };
 
   config = {
+    randomscanian.cli-apps.fish = (if cfg.shell == "fish" then enabled else disabled);
     users.users.${cfg.name} = {
       isNormalUser = true;
       extraGroups = mkIf cfg.sudo [ "wheel" ];
+
+      shell = (if cfg.shell == "fish" then pkgs.fish else (if cfg.shell == "zsh" then pkgs.zsh else pkgs.bash));
+      
       #TODO: Change when get secrets work
       initialHashedPassword = "$y$j9T$O9r0yOHfNX//PTholNQUo1$T9T1g/swpp8ClwVzub7hb67xQ8h2NwnReQVknUL80zD";
     };

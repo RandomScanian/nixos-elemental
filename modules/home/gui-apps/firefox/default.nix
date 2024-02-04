@@ -17,8 +17,10 @@ in {
       enable = true;
 
       profiles.${config.home.username} = {
+        
         id = 0;
         name = config.home.username;
+        
         bookmarks = [
           {
             name = "Nix sites";
@@ -53,10 +55,12 @@ in {
             ];
           }
         ];
+        
         search = {
           force = true;
           default = "Startpage";
           engines = {
+
             "Nix Packages" = {
               urls = [
                 {
@@ -80,6 +84,7 @@ in {
               icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
               definedAliases = [ "@np" ];
             };
+            
             "Startpage" = {
               urls = [
                 {
@@ -88,6 +93,7 @@ in {
               ];
               definedAliases = [ "@s" ];
             };
+            
             "ProtonDB" = {
               urls = [
                 {
@@ -96,6 +102,7 @@ in {
               ];
               definedAliases = [ "@p" ];
             };
+            
             "Nix Options" = {
               urls = [
                 {
@@ -119,6 +126,7 @@ in {
               icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
               definedAliases = [ "@no" ];
             };
+            
             "NixOS Wiki" = {
               urls = [
                 {
@@ -129,6 +137,7 @@ in {
               updateInterval = 24 * 60 * 60 * 1000;
               definedAliases = [ "@nw" ];
             };
+            
             "Youtube" = {
               urls = [
                 {
@@ -137,9 +146,12 @@ in {
               ];
               definedAliases = [ "@y" ];
             };
+            
             "Google".metaData.alias = "@g";
+            
           };
         };
+        
         extensions = with inputs.firefox-addons.packages.${pkgs.system}; [
           ublock-origin
           bitwarden
@@ -152,7 +164,9 @@ in {
           honey
           return-youtube-dislikes
           fastforwardteam
+          youtube-shorts-block
         ];
+        
         extraConfig = ''
              user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
              user_pref("full-screen-api.ignore-widgets", true);
@@ -171,7 +185,9 @@ in {
         userChrome = ''
           #TabsToolbar{ visibility: collapse !important }
         '' + cfg.userChrome;
+        
         #userContent = "";
+        
       };
     };
   };

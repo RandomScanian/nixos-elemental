@@ -12,6 +12,7 @@ in
   config = mkIf cfg.enable {
     randomscanian = {
       cli-apps = {
+        just = enabled;
         tmux = enabled;
         fd = enabled;
         fzf = enabled;

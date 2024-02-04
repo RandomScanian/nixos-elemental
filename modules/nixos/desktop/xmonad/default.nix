@@ -19,6 +19,9 @@ in
       gui-apps = {
         rofi = enabled;
       };
+      services = {
+        polybar = enabled;
+      };
       desktop = {
         #wallpapers = enabled;
       };

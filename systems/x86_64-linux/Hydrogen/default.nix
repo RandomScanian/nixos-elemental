@@ -10,11 +10,8 @@ with lib.randomscanian;
       desktop = enabled;
       gaming = enabled;
     };
-    cli-apps = {
-      just = enabled;
-    };
     gui-apps = {
-      doukutsu-rs = enabled;
+      emacs = enabled;
     };
     services = {
       ssh = enabled;
@@ -32,9 +29,6 @@ with lib.randomscanian;
         email = "randomscanian@protonmail.com";
         shell = "fish";
       };
-    };
-    desktop = {
-      xmonad = enabled;
     };
   };
 
