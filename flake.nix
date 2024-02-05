@@ -112,7 +112,7 @@
       systems.modules.nixos = [
 	inputs.nix-ld.nixosModules.nix-ld
 	inputs.sops-nix.nixosModules.sops
-	./secrets.nix
+	"${inputs.nixos-elemental}/secrets/secrets.nix"
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager.sharedModules = [

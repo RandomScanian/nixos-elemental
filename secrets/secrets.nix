@@ -1,7 +1,7 @@
 {config, ...}: {
   sops = {
-    defaultSopsFile = ./secrets/secrets.yaml;
+    defaultSopsFile = ./secrets.yaml;
     defaultSopsFormat = "yaml";
-    #age.keyFile = ./secrets/gitcrypt/keys.txt;
+    #age.keyFile = ./gitcrypt/keys.txt;
   };
 }
