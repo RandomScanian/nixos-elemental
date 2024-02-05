@@ -11,7 +11,8 @@ in {
   config = mkIf cfg.enable {
     programs.emacs = {
       enable = true;
-      extraConfig = builtins.readFile "${inputs.nixos-elemental}/assets/emacs/init.el";
     };
+    xdg.configFile."emacs/init.el".source = "${inputs.nixos-elemental}/assets/emacs/init.el";
+    xdg.configFile."emacs/early-init.el".source = "${inputs.nixos-elemental}/assets/emacs/early-init.el";
   };
 }

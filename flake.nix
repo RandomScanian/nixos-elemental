@@ -37,7 +37,7 @@
     };
 
     #TODO: setup secrets
-    sops = {
+    sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
@@ -112,6 +112,7 @@
       systems.modules.nixos = [
 	inputs.nix-ld.nixosModules.nix-ld
 	inputs.sops-nix.nixosModules.sops
+	./secrets.nix
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager.sharedModules = [

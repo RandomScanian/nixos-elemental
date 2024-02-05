@@ -37,6 +37,7 @@ import XMonad.Layout.SimplestFloat
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.Spiral
+import XMonad.Layout.BinarySpacePartition
 
 -- Layouts modifiers
 import XMonad.Layout.LayoutModifier

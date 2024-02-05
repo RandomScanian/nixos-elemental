@@ -356,11 +356,11 @@
     "nixos-elemental": {
       "flake": false,
       "locked": {
-        "lastModified": 1707062599,
-        "narHash": "sha256-hJ8zrVCmqHKVHPOOrTav3LvrutWqacRT6nl5eLhOjgw=",
+        "lastModified": 1707080890,
+        "narHash": "sha256-oKM1VbNZrVIAkxS4tGlkzkiKCYhq/D+ly2EqniCkHxQ=",
         "owner": "RandomScanian",
         "repo": "nixos-elemental",
-        "rev": "0f15d511fc1ae1686bffb61b363c98acf6f6d1c0",
+        "rev": "7dfb2a595bdf1904d869f287c99e62d6ef7a301b",
         "type": "github"
       },
       "original": {
@@ -486,7 +486,7 @@
         "nur": "nur",
         "replugged": "replugged",
         "snowfall-lib": "snowfall-lib",
-        "sops": "sops"
+        "sops-nix": "sops-nix"
       }
     },
     "rust-overlay": {
@@ -563,7 +563,7 @@
         "type": "github"
       }
     },
-    "sops": {
+    "sops-nix": {
       "inputs": {
         "nixpkgs": [
           "nixpkgs"
