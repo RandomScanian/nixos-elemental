@@ -163,7 +163,7 @@ myLayoutHook = avoidStruts
                                            ||| noBorders tabs
                                            ||| withBorder myBorderWidth tall
 
-myWorkspaces = [" www ", " chat ", " game ", " launcher ", " emulations ", " dev ", " else1 ", " else2 ", " Away "]
+myWorkspaces = ["WWW","CHAT","GAME","LAUNCHER","EMULATIONS","DEV","ELSE1","ELSE2","AWAY"] 
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
@@ -213,7 +213,7 @@ myKeys c =
   , ("M-S-q", addName "Quit XMonad"            $ io exitSuccess)
   , ("M-S-c", addName "Kill focused window"    $ kill1)
   , ("M-S-a", addName "Kill all windows on WS" $ killAll)
-  , ("M-S-<Return>", addName "Run prompt"      $ spawn "dmenu_run")
+  , ("M-S-<Return>", addName "Run prompt"      $ spawn "dmenu")
 
   , ("M-S-b", addName "Toggle bar show/hide"   $ sendMessage ToggleStruts)]
 
@@ -284,7 +284,7 @@ myKeys c =
 
 main :: IO ()
 main = do
-  xmonad $ docks $ def
+  xmonad $ docks. ewmh $ def
     { manageHook         = myManageHook <+> manageDocks
     , modMask            = myModMask
     , terminal           = myTerminal
