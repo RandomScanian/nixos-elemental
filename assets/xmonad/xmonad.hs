@@ -37,7 +37,7 @@ import XMonad.Layout.SimplestFloat
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
 import XMonad.Layout.Spiral
-import XMonad.Layout.BinarySpacePartition
+import XMonad.LayoutB.inarySpacePartition
 
 -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
@@ -58,7 +58,7 @@ import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
  -- Utilities
 import XMonad.Util.Dmenu
 import XMonad.Util.EZConfig (additionalKeysP, mkNamedKeymap)
-import XMonad.Util.Hacks (javaHack, trayerAboveXmobarEventHook, trayAbovePanelEventHook, trayerPaddingXmobarEventHook, trayPaddingXmobarEventHook, trayPaddingEventHook)
+import XMonad.Util.Hacks (javaHack)
 import XMonad.Util.NamedActions
 import XMonad.Util.NamedScratchpad
 import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
@@ -160,6 +160,7 @@ myLayoutHook = avoidStruts
     myDefaultLayout = withBorder myBorderWidth spirals
                                            ||| noBorders monocle
                                            ||| floats
+                                           ||| withBorder myBorderWidth emptyBSP
                                            ||| noBorders tabs
                                            ||| withBorder myBorderWidth tall
 
@@ -261,6 +262,24 @@ myKeys c =
   , ("M-l", addName "Expand window"               $ sendMessage Expand)
   , ("M-M1-j", addName "Shrink window vertically" $ sendMessage MirrorShrink)
   , ("M-M1-k", addName "Expand window vertically" $ sendMessage MirrorExpand)]
+
+  -- Binary Space Partition
+  ^++^ subKeys "Binary Space Partition"
+  [ ("M-M1-l" , addName "Expand Right" $ sendMessage ExpandTowards R)
+    ("M-M1-h" , addName "Expand Left" $ sendMessage ExpandTowards L)
+    ("M-M1-j" , addName "Expand Down" $ sendMessage ExpandTowards D)
+    ("M-M1-k" , addName "Expand Up" $ sendMessage ExpandTowards U)
+    ("M-M1-C-l" , addName "Shrink Right" $ sendMessage R)
+    ("M-M1-C-h" , addName "Shrink Left" $ sendMessage L)
+    ("M-M1-C-j" , addName "Shrink Down" $ sendMessage D)
+    ("M-M1-C-k" , addName "Shrink Up" $ sendMessage U)
+    ("M-r" , addName "" $ sendMessage Rotate)
+    ("M-s" , addName "" $ sendMessage Swap)
+    ("M-n" , addName "" $ sendMessage FocusParent)
+    ("M-C-n" , addName "" $ sendMessage SelectNode)
+    ("M-S-n" , addName "" $ sendMessage MoveNode)
+    ("M-C-S-j" , addName "" $ sendMessage $ SplitShift Prev)
+    ("M-C-S-k" , addName "" $ sendMessage $ SplitShift Next)]
 
   -- Floating windows
   ^++^ subKeys "Floating windows"
