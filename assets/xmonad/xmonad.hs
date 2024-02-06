@@ -36,8 +36,7 @@ import XMonad.Hooks.InsertPosition
 import XMonad.Layout.SimplestFloat
 import XMonad.Layout.ResizableTile
 import XMonad.Layout.Tabbed
-import XMonad.Layout.Spiral
-import XMonad.Layout.BinarySpacePartition
+-- import XMonad.Layout.Spiral
 
 -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
@@ -56,7 +55,6 @@ import qualified XMonad.Layout.ToggleLayouts as T (toggleLayouts, ToggleLayout(T
 import qualified XMonad.Layout.MultiToggle as MT (Toggle(..))
 
  -- Utilities
-import XMonad.Util.Dmenu
 import XMonad.Util.EZConfig (additionalKeysP, mkNamedKeymap)
 import XMonad.Util.Hacks (javaHack)
 import XMonad.Util.NamedActions
@@ -88,7 +86,6 @@ color13="#caa9fa"
 color14="#ff92d0"
 color15="#9aedfe"
 color16="#e6e6e6"
-
 
 myModMask :: KeyMask
 myModMask = mod4Mask      
@@ -129,14 +126,14 @@ monocle  = renamed [Replace "monocle"]
 floats   = renamed [Replace "floats"]
            $ smartBorders
            $ simplestFloat
-spirals  = renamed [Replace "spirals"]
-           $ limitWindows 9
-           $ smartBorders
-           $ windowNavigation
-           $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
-           $ mySpacing 8
-           $ spiral (6/7)
+-- spirals  = renamed [Replace "spirals"]
+--            $ limitWindows 9
+--            $ smartBorders
+--            $ windowNavigation
+--            $ addTabs shrinkText myTabTheme
+--            $ subLayout [] (smartBorders Simplest)
+--            $ mySpacing 8
+--            $ spiral (6/7)
 tabs     = renamed [Replace "tabs"]
            $ tabbed shrinkText myTabTheme
 
@@ -157,12 +154,10 @@ myLayoutHook = avoidStruts
                $ T.toggleLayouts floats
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
   where
-    myDefaultLayout = withBorder myBorderWidth spirals
+    myDefaultLayout = withBorder myBorderWidth tall
                                            ||| noBorders monocle
                                            ||| floats
-                                           ||| withBorder myBorderWidth emptyBSP
                                            ||| noBorders tabs
-                                           ||| withBorder myBorderWidth tall
 
 myWorkspaces = ["WWW","CHAT","GAME","LAUNCHER","EMULATIONS","DEV","ELSE1","ELSE2","AWAY"] 
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
@@ -210,13 +205,13 @@ myKeys c =
   --(subtitle "Custom Keys":) $ mkNamedKeymap c $
   let subKeys str ks = subtitle' str : mkNamedKeymap c ks in
   subKeys "Xmonad Essentials"
-  [ ("M-S-r", addName "Restart XMonad"         $ spawn "xmonad --restart")
-  , ("M-S-q", addName "Quit XMonad"            $ io exitSuccess)
-  , ("M-S-c", addName "Kill focused window"    $ kill1)
-  , ("M-S-a", addName "Kill all windows on WS" $ killAll)
-  , ("M-S-<Return>", addName "Run prompt"      $ spawn "dmenu")
-
-  , ("M-S-b", addName "Toggle bar show/hide"   $ sendMessage ToggleStruts)]
+  [ ("M-S-r",        addName "Restart XMonad"         $ spawn "xmonad --restart")
+  , ("M-S-q",        addName "Quit XMonad"            $ io exitSuccess)
+  , ("M-S-c",        addName "Kill focused window"    $ kill1)
+  , ("M-S-a",        addName "Kill all windows on WS" $ killAll)
+  , ("M-S-<Return>", addName "Launch terminal"        $ spawn (myTerminal))
+  , ("M-p",          addName "Run prompt"             $ spawn "dmenu")
+  , ("M-S-b",        addName "Toggle bar show/hide"   $ sendMessage ToggleStruts)]
 
   ^++^ subKeys "Switch to workspace"
   [ ("M-1", addName "Switch to workspace 1"    $ (windows $ W.greedyView $ myWorkspaces !! 0))
@@ -262,21 +257,6 @@ myKeys c =
   , ("M-l", addName "Expand window"               $ sendMessage Expand)
   , ("M-M1-j", addName "Shrink window vertically" $ sendMessage MirrorShrink)
   , ("M-M1-k", addName "Expand window vertically" $ sendMessage MirrorExpand)]
-
-  -- Binary Space Partition
-  ^++^ subKeys "Binary Space Partition"
-  [ ("M-M1-<Left>",    sendMessage $ ExpandTowards L)
-    ("M-M1-<Right>",   sendMessage $ ShrinkFrom L)
-    ("M-M1-<Up>",      sendMessage $ ExpandTowards U)
-    ("M-M1-<Down>",    sendMessage $ ShrinkFrom U)
-    ("M-M1-C-<Left>",  sendMessage $ ShrinkFrom R)
-    ("M-M1-C-<Right>", sendMessage $ ExpandTowards R)
-    ("M-M1-C-<Up>",    sendMessage $ ShrinkFrom D)
-    ("M-M1-C-<Down>",  sendMessage $ ExpandTowards D)
-    ("M-s",            sendMessage $ Swap)
-    ("M-M1-s",         sendMessage $ Rotate)
-    ("M-S-C-j",        sendMessage $ SplitShift Prev)
-    ("M-S-C-k",        sendMessage $ SplitShift Next)]
   
   -- Floating windows
   ^++^ subKeys "Floating windows"
@@ -284,23 +264,16 @@ myKeys c =
   , ("M-t", addName "Sink a floating window"     $ withFocused $ windows . W.sink)
   , ("M-S-t", addName "Sink all floated windows" $ sinkAll)]
 
-  -- Increase/decrease spacing (gaps)
-  ^++^ subKeys "Window spacing (gaps)"
-  [ ("C-M1-j", addName "Decrease window spacing" $ decWindowSpacing 4)
-  , ("C-M1-k", addName "Increase window spacing" $ incWindowSpacing 4)
-  , ("C-M1-h", addName "Decrease screen spacing" $ decScreenSpacing 4)
-  , ("C-M1-l", addName "Increase screen spacing" $ incScreenSpacing 4)]
-
   -- Increase/decrease windows in the master pane or the stack
   ^++^ subKeys "Increase/decrease windows in master pane or the stack"
   [ ("M-S-<Up>", addName "Increase clients in master pane"   $ sendMessage (IncMasterN 1))
   , ("M-S-<Down>", addName "Decrease clients in master pane" $ sendMessage (IncMasterN (-1)))
   , ("M-=", addName "Increase max # of windows for layout"   $ increaseLimit)
-  , ("M--", addName "Decrease max # of windows for layout"   $ decreaseLimit)]
+  , ("M--", addName "ecrease max # of windows for layout"   $ decreaseLimit)]
 
 main :: IO ()
 main = do
-  xmonad $ docks. ewmh $ def
+  xmonad $ addDescrKeys' ((mod4Mask, xK_F1), showKeybindings) myKeys $ docks. ewmh $ def
     { manageHook         = myManageHook <+> manageDocks
     , modMask            = myModMask
     , terminal           = myTerminal

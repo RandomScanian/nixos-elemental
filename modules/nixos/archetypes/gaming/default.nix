@@ -16,6 +16,8 @@ in
         emulation = enabled;
         gaming = enabled;
       };
+      gui-apps = {
+        steam = enabled;
     };
   };
 }

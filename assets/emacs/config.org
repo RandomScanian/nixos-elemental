@@ -19,7 +19,7 @@
   (set-face-attribute 'fixed-pitch nil :font "JetBrainsMono Nerd Font" :height rs/default-font-size)
 
   ;; Set the variable pitch face
-  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height rs/default-variable-font-size :weight 'regular)  
+  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height rs/default-variable-font-size :weight 'regular)
 #+end_src
 * Install elpaca.el
 #+begin_src emacs-lisp
@@ -105,6 +105,6 @@
 #+end_src
 * Programming
 ** nix
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (use-package nix-mode)
 #+end_src

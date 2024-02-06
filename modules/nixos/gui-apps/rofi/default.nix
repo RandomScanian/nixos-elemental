@@ -12,7 +12,7 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       rofi
-      dmenu
+      randomscanian.dmenu
     ];
     randomscanian.system.home.extraOptions = {
       randomscanian.gui-apps.rofi = enabled;

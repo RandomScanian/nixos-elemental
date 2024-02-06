@@ -64,6 +64,9 @@
       flake = false;
     };
 
+    #Colors
+    nix-colors.url = "github:misterio77/nix-colors";
+    
     #Comma
     comma = {
       url = "github:nix-community/comma";
@@ -83,23 +86,28 @@
       flake = false;
     };
   };
-
-  outputs = inputs: let
-    lib = inputs.snowfall-lib.mkLib {
+  
+  outputs = inputs:
+    inputs.snowfall-lib.mkFlake {
       inherit inputs;
       src = ./.;
 
+      # Configure Snowfall Lib, all of these settings are optional.
       snowfall = {
-        meta = {
-          name = "randomscanian";
-          title = "RandomScanian";
-        };
-
+        # Choose a namespace to use for your flake's packages, library,
+        # and overlays.
         namespace = "randomscanian";
+
+        # Add flake metadata that can be processed by tools like Snowfall Frost.
+        meta = {
+          # A slug to use in documentation when displaying things like file paths.
+          name = "nixos-elemental";
+
+          # A title to show for your flake, typically the name.
+          title = "nixos-elemental";
+        };
       };
-    };
-  in
-    lib.mkFlake {
+      
       channels-config = {
         allowUnfree = true;
         permittedInsecurePackages = [];
@@ -108,15 +116,17 @@
       overlays = with inputs; [
         nur.overlay
       ];
-
-      systems.modules.nixos = [
-	inputs.nix-ld.nixosModules.nix-ld
-	inputs.sops-nix.nixosModules.sops
-	"${inputs.nixos-elemental}/secrets/secrets.nix"
+      
+      # Add modules to all NixOS systems.
+      systems.modules.nixos = with inputs; [
+        inputs.nix-ld.nixosModules.nix-ld
+	      inputs.sops-nix.nixosModules.sops
+	      "${inputs.nixos-elemental}/secrets/secrets.nix"
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager.sharedModules = [
             inputs.nur.hmModules.nur
+            inputs.nix-colors.homeManagerModules.default
           ];
         }
       ];

@@ -7,4 +7,6 @@ check:
 rebuild hostname=`hostname`:
 	sudo nixos-rebuild switch --flake ~/nixos-elemental#$1
 build hostname=`hostname`:
-	sudo nixos-rebuild build --flake ~/nixos-elemental#$1
+      sudo nixos-rebuild build --flake ~/nixos-elemental#$1
+test hostname=`hostname`:
+     sudo nixos-rebuild test --flake ~/nixos-elemental#$1

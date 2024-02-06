@@ -27,13 +27,14 @@ with lib.randomscanian;
       user = {
         name = "randomscanian";
         email = "randomscanian@protonmail.com";
-	hashedPasswordFile = config.sops.secrets.randomscanianPassword.path;
         shell = "fish";
       };
     };
   };
 
-  sops.secrets.randomscanianPassword.neededForUsers = true;
+  users.users.randomscanian.hashedPassword = "$y$j9T$kI9hpK/554Wty7xFGFfGz/$OyoLajf9qVF/MZIKdY0JTC73AlWUnUEHbaDGBcJkSX2";
+  
+  #sops.secrets.randomscanianPassword.neededForUsers = true;
 
   #TEMP
   networking.firewall.enable = false;
