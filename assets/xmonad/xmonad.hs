@@ -265,22 +265,19 @@ myKeys c =
 
   -- Binary Space Partition
   ^++^ subKeys "Binary Space Partition"
-  [ ("M-M1-l" , addName "Expand Right" $ sendMessage ExpandTowards R)
-    ("M-M1-h" , addName "Expand Left" $ sendMessage ExpandTowards L)
-    ("M-M1-j" , addName "Expand Down" $ sendMessage ExpandTowards D)
-    ("M-M1-k" , addName "Expand Up" $ sendMessage ExpandTowards U)
-    ("M-M1-C-l" , addName "Shrink Right" $ sendMessage R)
-    ("M-M1-C-h" , addName "Shrink Left" $ sendMessage L)
-    ("M-M1-C-j" , addName "Shrink Down" $ sendMessage D)
-    ("M-M1-C-k" , addName "Shrink Up" $ sendMessage U)
-    ("M-r" , addName "" $ sendMessage Rotate)
-    ("M-s" , addName "" $ sendMessage Swap)
-    ("M-n" , addName "" $ sendMessage FocusParent)
-    ("M-C-n" , addName "" $ sendMessage SelectNode)
-    ("M-S-n" , addName "" $ sendMessage MoveNode)
-    ("M-C-S-j" , addName "" $ sendMessage $ SplitShift Prev)
-    ("M-C-S-k" , addName "" $ sendMessage $ SplitShift Next)]
-
+  [ ("M-M1-<Left>",    sendMessage $ ExpandTowards L)
+    ("M-M1-<Right>",   sendMessage $ ShrinkFrom L)
+    ("M-M1-<Up>",      sendMessage $ ExpandTowards U)
+    ("M-M1-<Down>",    sendMessage $ ShrinkFrom U)
+    ("M-M1-C-<Left>",  sendMessage $ ShrinkFrom R)
+    ("M-M1-C-<Right>", sendMessage $ ExpandTowards R)
+    ("M-M1-C-<Up>",    sendMessage $ ShrinkFrom D)
+    ("M-M1-C-<Down>",  sendMessage $ ExpandTowards D)
+    ("M-s",            sendMessage $ Swap)
+    ("M-M1-s",         sendMessage $ Rotate)
+    ("M-S-C-j",        sendMessage $ SplitShift Prev)
+    ("M-S-C-k",        sendMessage $ SplitShift Next)]
+  
   -- Floating windows
   ^++^ subKeys "Floating windows"
   [ ("M-f", addName "Toggle float layout"        $ sendMessage (T.Toggle "floats"))
