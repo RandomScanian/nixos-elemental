@@ -1,10 +1,14 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.system.locale;
-in
 {
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.system.locale;
+in {
   options.randomscanian.system.locale = with types; {
     enable = mkBoolOpt false "Whether or not to manage locale settings.";
   };

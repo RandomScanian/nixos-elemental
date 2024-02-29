@@ -1,19 +1,30 @@
-{ options, config, pkgs, lib, ... }:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.system.env;
-in
 {
+  options,
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.system.env;
+in {
   options.randomscanian.system.env = with types;
     mkOption {
-      type = attrsOf (oneOf [ str path (listOf (either str path)) ]);
-      apply = mapAttrs (n: v:
-        if isList v then
-          concatMapStringsSep ":" (x: toString x) v
-        else
-          (toString v));
-      default = { };
+      type = attrsOf (
+        oneOf [
+          str
+          path
+          (listOf (either str path))
+        ]
+      );
+      apply = mapAttrs (
+        n: v:
+          if isList v
+          then concatMapStringsSep ":" (x: toString x) v
+          else (toString v)
+      );
+      default = {};
       description = "A set of environment variables to set.";
     };
 
@@ -30,8 +41,7 @@ in
         LESSHISTFILE = "$XDG_CACHE_HOME/less.history";
         WGETRC = "$XDG_CONFIG_HOME/wget/wgetrc";
       };
-      extraInit = concatStringsSep "\n"
-        (mapAttrsToList (n: v: ''export ${n}="${v}"'') cfg);
+      extraInit = concatStringsSep "\n" (mapAttrsToList (n: v: ''export ${n}="${v}"'') cfg);
     };
   };
 }

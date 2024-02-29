@@ -1,7 +1,12 @@
-{lib, config, pkgs, inputs, ...}:
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.randomscanian;
-let
+with lib.randomscanian; let
   cfg = config.randomscanian.gui-apps.alacritty;
 in {
   options.randomscanian.gui-apps.alacritty = {
@@ -12,8 +17,9 @@ in {
     programs.alacritty = {
       enable = true;
       settings = {
-        import = [ "${inputs.dracula-alacritty}/dracula.toml" ];
+        import = ["${inputs.dracula-alacritty}/dracula.toml"];
         window.opacity = 1;
+        colors.draw_bold_text_with_bright_colors = false;
         font = {
           normal = {
             family = "JetBrainsMono Nerd Font";

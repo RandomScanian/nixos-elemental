@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.suites.common;
-in
 {
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.suites.common;
+in {
   options.randomscanian.suites.common = with types; {
     enable = mkBoolOpt false "Whether or not to enable the common suite";
   };
@@ -13,13 +18,13 @@ in
     randomscanian = {
       cli-apps = {
         just = enabled;
-	tldr = enabled;
+        tldr = enabled;
         tmux = enabled;
         fd = enabled;
         fzf = enabled;
         ripgrep = enabled;
         eza = enabled;
-	git = enabled;
+        git = enabled;
       };
     };
   };

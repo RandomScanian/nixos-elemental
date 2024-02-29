@@ -1,7 +1,12 @@
-{lib, config, pkgs, inputs, ...}:
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.randomscanian;
-let
+with lib.randomscanian; let
   cfg = config.randomscanian.services.polybar;
   colors = {
     foreground = config.colorScheme.palette.base05;
@@ -11,11 +16,11 @@ in {
   options.randomscanian.services.polybar = with types; {
     enable = mkEnableOption "Whether or not to enable polybar.";
   };
-  
+
   config = mkIf cfg.enable {
     services.polybar = {
       enable = true;
-      
+
       package = pkgs.polybar.override {
         alsaSupport = true;
         githubSupport = true;
@@ -39,7 +44,7 @@ in {
           pin-workspaces = true;
           enable-click = false;
           enable-scroll = false;
-          
+
           label-active = "%name%";
           label-active-foreground = "${colors.foreground}";
           label-active-background = "${colors.background}";
@@ -68,7 +73,7 @@ in {
           format-foreground = "${colors.foreground}";
           format-background = "${colors.background}";
         };
-        
+
         "module/date" = {
           type = "internal/date";
           internal = 0;

@@ -1,7 +1,12 @@
-{lib, config, pkgs, ...}:
+{
+  lib,
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.randomscanian;
-let
+with lib.randomscanian; let
   cfg = config.randomscanian.cli-apps.fish;
 in {
   options.randomscanian.cli-apps.fish = {
@@ -9,40 +14,52 @@ in {
     neofetchOnInit = mkBoolOpt true "Whether or not to run neofetch on shell init.";
     enableGrc = mkBoolOpt true "Whether or not to enable grc.";
     enableBangBang = mkBoolOpt true "Whether or not to enable grc.";
+    enableZoxide = mkBoolOpt true "Whether or not to enable zoxide.";
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; mkIf cfg.enableGrc [
-      grc
-    ];
+    home = {
+      packages = with pkgs; mkIf cfg.enableGrc [grc];
+      shellAliases = optionalAttrs config.randomscanian.gui-apps.emacs.enable {
+        cdired = ''emacs --no-window-system --eval "(dired \"$(pwd)\""'';
+        dired = ''emacs --eval "(dired \"$(pwd)\""'';
+      };
+    };
+
+    programs.zoxide = mkIf cfg.enableZoxide {
+      enable = true;
+      options = [];
+    };
+
     programs.fish = {
       enable = true;
       shellInit = ''
         function fish_greeting
-        end
-      '';
-      interactiveShellInit = ''
-        ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
-      '' + (if cfg.neofetchOnInit == true then "${pkgs.neofetch}/bin/neofetch" else "");
+        end'';
+      interactiveShellInit =
+        ''
+          ${pkgs.any-nix-shell}/bin/any-nix-shell fish --info-right | source
+        ''
+        + optionalString cfg.neofetchOnInit ''
+          ${pkgs.neofetch}/bin/neofetch
+        '';
       plugins = [
-        (if cfg.enableBangBang == true then {
-          name = "bang-bang";
-          src = pkgs.fetchFromGitHub {
-            owner = "oh-my-fish";
-            repo = "plugin-bang-bang";
-            rev = "816c66df34e1cb94a476fa6418d46206ef84e8d3";
-            hash = "sha256-35xXBWCciXl4jJrFUUN5NhnHdzk6+gAxetPxXCv4pDc=";
-          };
-        } else {})
-        (if cfg.enableGrc == true then {
-          name = "grc";
-          src = pkgs.fetchFromGitHub {
-            owner = "oh-my-fish";
-            repo = "plugin-grc";
-            rev = "61de7a8a0d7bda3234f8703d6e07c671992eb079";
-            hash = "sha256-NQa12L0zlEz2EJjMDhWUhw5cz/zcFokjuCK5ZofTn+Q=";
-          };
-        } else {})
+        (
+          if cfg.enableBangBang
+          then {
+            name = "bang-bang";
+            src = inputs.fishBangBang;
+          }
+          else {}
+        )
+        (
+          if cfg.enableGrc
+          then {
+            name = "grc";
+            src = inputs.fishGrc;
+          }
+          else {}
+        )
       ];
     };
   };

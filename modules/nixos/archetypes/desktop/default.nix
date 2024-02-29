@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.archetypes.desktop;
-in
 {
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.archetypes.desktop;
+in {
   options.randomscanian.archetypes.desktop = with types; {
     enable = mkBoolOpt false "Whether or not to enable the Desktop archetype";
   };
@@ -16,8 +21,10 @@ in
         desktop = enabled;
       };
       desktop = {
-        xmonad = enabled;
         lightdm = enabled;
+        xmonad = enabled;
+        i3 = disabled;
+        #sddm = disabled;
       };
       hardware = {
         audio = enabled;

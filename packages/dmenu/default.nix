@@ -1,4 +1,8 @@
-{ pkgs, lib, ...}:
-pkgs.writeShellScriptBin "dmenu" ''
-rofi -show drun $@  
+{
+  pkgs,
+  lib,
+  ...
+}:
+pkgs.writeShellScriptBin "dmenu_run" ''
+  rofi -show drun $@
 ''

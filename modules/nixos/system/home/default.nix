@@ -1,16 +1,21 @@
-{ options, config, pkgs, lib, inputs, ... }:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.home;
-in
 {
+  options,
+  config,
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.home;
+in {
   options.randomscanian.system.home = with types; {
-    file = mkOpt attrs { }
-      (mdDoc "A set of files to be managed by home-manager's `home.file`.");
-    configFile = mkOpt attrs { }
-      (mdDoc "A set of files to be managed by home-manager's `xdg.configFile`.");
-    extraOptions = mkOpt attrs { } "Options to pass directly to home-manager.";
+    file = mkOpt attrs {} (mdDoc "A set of files to be managed by home-manager's `home.file`.");
+    configFile = mkOpt attrs {} (
+      mdDoc "A set of files to be managed by home-manager's `xdg.configFile`."
+    );
+    extraOptions = mkOpt attrs {} "Options to pass directly to home-manager.";
   };
 
   config = {
@@ -21,6 +26,7 @@ in
       xdg.enable = true;
       xdg.userDirs.createDirectories = true;
       xdg.configFile = mkAliasDefinitions options.randomscanian.system.home.configFile;
+      systemd.user.startServices = "sd-switch";
       home.username = "${config.randomscanian.system.user.name}";
       home.homeDirectory = "/home/${config.randomscanian.system.user.name}";
     };
@@ -31,13 +37,12 @@ in
 
       users.root = {
         home.stateVersion = config.system.stateVersion;
-      	xdg.enable = true;
-      	xdg.userDirs.createDirectories = true;
-	programs.home-manager = enabled;
+        xdg.enable = true;
+        xdg.userDirs.createDirectories = true;
+        programs.home-manager = enabled;
       };
-      
-      users.${config.randomscanian.system.user.name} =
-        mkAliasDefinitions options.randomscanian.system.home.extraOptions;
+
+      users.${config.randomscanian.system.user.name} = mkAliasDefinitions options.randomscanian.system.home.extraOptions;
     };
   };
 }

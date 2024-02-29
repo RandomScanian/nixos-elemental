@@ -1,7 +1,11 @@
-{lib, config, pkgs, ...}:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.randomscanian;
-let
+with lib.randomscanian; let
   cfg = config.randomscanian.cli-apps.git;
 in {
   options.randomscanian.cli-apps.git = with types; {
@@ -22,8 +26,8 @@ in {
       };
       signing = mkIf cfg.signing {
         enable = true;
-	key = cfg.key;
-	signByDefault = true;
+        key = cfg.key;
+        signByDefault = true;
       };
     };
   };

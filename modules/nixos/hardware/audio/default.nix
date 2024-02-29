@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.hardware.audio;
-in
 {
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.hardware.audio;
+in {
   options.randomscanian.hardware.audio = with types; {
     enable = mkBoolOpt false "Whether or not to enable audio";
   };
@@ -12,6 +17,9 @@ in
   config = mkIf cfg.enable {
     randomscanian.cli-apps.pulsemixer = enabled;
     security.rtkit.enable = true;
+    hardware.pulseaudio = mkForce {
+      enable = false;
+    };
     services.pipewire = {
       enable = true;
       alsa.enable = true;

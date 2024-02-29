@@ -1,17 +1,24 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
+{
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
 with lib;
-with lib.randomscanian;
-let
+with lib.randomscanian; let
   cfg = config.randomscanian.desktop.lightdm;
   gtkcfg = config.randomscanian.desktop.gtk;
-in
-{
+in {
   options.randomscanian.desktop.lightdm = with types; {
     enable = mkBoolOpt false "Whether or not to enable lightdm";
   };
 
   config = mkIf cfg.enable {
+    randomscanian.system.home.extraOptions = {
+      xsession.numlock.enable = true;
+    };
     services.xserver = {
       enable = true;
       displayManager.lightdm = {

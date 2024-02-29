@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.suites.emulation;
-in
 {
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.suites.emulation;
+in {
   options.randomscanian.suites.emulation = with types; {
     enable = mkBoolOpt false "Whether or not to enable the emulation suite.";
   };

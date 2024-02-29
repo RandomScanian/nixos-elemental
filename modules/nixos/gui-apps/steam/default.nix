@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.gui-apps.steam;
-in
 {
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.gui-apps.steam;
+in {
   options.randomscanian.gui-apps.steam = with types; {
     enable = mkBoolOpt false "Whether or not to enable Steam.";
     openFirewall = mkBoolOpt true "Whether or not to open steam network ports.";
@@ -16,6 +21,9 @@ in
       enable = true;
       remotePlay.openFirewall = cfg.openFirewall;
       dedicatedServer.openFirewall = cfg.openFirewall;
+    };
+    randomscanian.system.home.extraOptions.randomscanian.desktop.keybindings.extraKeybindings = {
+      "super + a; super + s" = "steam";
     };
   };
 }

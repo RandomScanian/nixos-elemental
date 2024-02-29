@@ -1,10 +1,13 @@
-{ options, config, lib, ... }:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.system.kbd;
-in
 {
+  options,
+  config,
+  lib,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.system.kbd;
+in {
   options.randomscanian.system.kbd = with types; {
     enable = mkBoolOpt false "Whether or not to configure keyboard.";
   };

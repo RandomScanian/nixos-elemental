@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.gui-apps.emacs;
-in
 {
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.gui-apps.emacs;
+in {
   options.randomscanian.gui-apps.emacs = with types; {
     enable = mkBoolOpt false "Whether or not to enable emacs.";
   };

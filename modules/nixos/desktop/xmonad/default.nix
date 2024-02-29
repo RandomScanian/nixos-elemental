@@ -1,11 +1,15 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
-with lib;
-with lib.randomscanian;
-let
-  cfg = config.randomscanian.desktop.xmonad;
-in
 {
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.desktop.xmonad;
+in {
   options.randomscanian.desktop.xmonad = with types; {
     enable = mkBoolOpt false "Whether or not to enable XMonad";
   };
@@ -23,7 +27,8 @@ in
         polybar = enabled;
       };
       desktop = {
-        #wallpapers = enabled;
+        wallpapers = enabled;
+        keybindings = enabled;
       };
       system.home.extraOptions = {
         randomscanian.desktop.xmonad = enabled;

@@ -44,20 +44,35 @@
 
     #Dracula theming
     dracula-alacritty = {
-      url = "github:dracula/alacritty";
+      url = "github:dracula/alacritty/9ae0fdedd423803f0401f6e7a23cd2bb88c175b2";
+      flake = false;
+    };
+    dracula-wallpaper = {
+      url = "github:dracula/wallpaper/f2b8cc4223bcc2dfd5f165ab80f701bbb84e3303";
       flake = false;
     };
     dracula-rofi = {
-      url = "github:dracula/rofi";
+      url = "github:dracula/rofi/459eee340059684bf429a5eb51f8e1cc4998eb74";
+      flake = false;
+    };
+    dracula-sddm = {
+      url = "github:nopain1210/Yet-another-dracula/69bb62e94654cecde4278816559d5dd75e9b5141?dir=Yet-another-dracula/sddm/Dracula/";
       flake = false;
     };
 
-    #DistroTube Xmonad
-    distrotube = {
-      url = "gitlab:dwt1/dotfiles";
+    # Fish plugins
+    fishBangBang = {
+      url = "github:oh-my-fish/plugin-bang-bang";
+      flake = false;
+    };
+    fishGrc = {
+      url = "github:oh-my-fish/plugin-grc";
       flake = false;
     };
 
+    #Hyprland
+    hyprland.url = "github:hyprwm/Hyprland";
+    
     #Betterfox
     betterfox = {
       url = "github:yokoffing/Betterfox";
@@ -66,17 +81,23 @@
 
     #Colors
     nix-colors.url = "github:misterio77/nix-colors";
-    
+
     #Comma
     comma = {
       url = "github:nix-community/comma";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
+
     #Nur
     nur.url = "github:nix-community/NUR";
     firefox-addons = {
       url = "gitlab:rycee/nur-expressions?dir=pkgs/firefox-addons";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # Database of nixpkgs
+    nix-index-database = {
+      url = "github:Mic92/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -86,7 +107,7 @@
       flake = false;
     };
   };
-  
+
   outputs = inputs:
     inputs.snowfall-lib.mkFlake {
       inherit inputs;
@@ -107,26 +128,42 @@
           title = "nixos-elemental";
         };
       };
-      
+
+      outputs-builder = channels: {formatter = channels.nixpkgs.alejandra;};
+
       channels-config = {
         allowUnfree = true;
         permittedInsecurePackages = [];
       };
 
-      overlays = with inputs; [
-        nur.overlay
-      ];
-      
+      overlays = with inputs; [nur.overlay];
+
       # Add modules to all NixOS systems.
       systems.modules.nixos = with inputs; [
+        {
+          nix.settings = {
+            auto-optimise-store = true;
+          };
+          nix.extraOptions = ''access-tokens = github.com=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'';
+          environment.etc."sddm-theme".source = inputs.dracula-sddm;
+        }
         inputs.nix-ld.nixosModules.nix-ld
-	      inputs.sops-nix.nixosModules.sops
-	      "${inputs.nixos-elemental}/secrets/secrets.nix"
+        inputs.sops-nix.nixosModules.sops
+        "${inputs.nixos-elemental}/secrets/secrets.nix"
+        inputs.nix-index-database.nixosModules.nix-index
+        {
+          programs.nix-index.enableBashIntegration = false;
+          programs.nix-index.enableZshIntegration = false;
+          programs.nix-index.enableFishIntegration = true;
+          programs.nix-index-database.comma.enable = true;
+        }
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager.sharedModules = [
             inputs.nur.hmModules.nur
             inputs.nix-colors.homeManagerModules.default
+            inputs.nix-index-database.hmModules.nix-index
+            {programs.nix-index-database.comma.enable = true;}
           ];
         }
       ];

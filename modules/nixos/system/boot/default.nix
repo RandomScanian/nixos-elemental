@@ -1,10 +1,15 @@
-{ options, config, lib, pkgs, inputs, ...}:
-
-with lib;
-with lib.randomscanian;
-let cfg = config.randomscanian.system.boot;
-in
 {
+  options,
+  config,
+  lib,
+  pkgs,
+  inputs,
+  ...
+}:
+with lib;
+with lib.randomscanian; let
+  cfg = config.randomscanian.system.boot;
+in {
   options.randomscanian.system.boot = with types; {
     grub = mkBoolOpt true "Whether or not to use grub";
     EFI = mkBoolOpt true "Whether or not the system use EFI";
@@ -22,11 +27,17 @@ in
         enable = cfg.grub;
         efiSupport = cfg.EFI;
         efiInstallAsRemovable = cfg.efiInstallAsRemovable;
-        device = (if cfg.EFI then "nodev" else cfg.device);
+        device =
+          if cfg.EFI
+          then "nodev"
+          else cfg.device;
         memtest86.enable = true;
       };
       systemd-boot = {
-        enable = (if cfg.grub == false then true else false);
+        enable =
+          if cfg.grub == false
+          then true
+          else false;
         memtest86.enable = true;
         editor = false;
       };

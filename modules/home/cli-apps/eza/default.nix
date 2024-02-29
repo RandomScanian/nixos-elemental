@@ -1,7 +1,11 @@
-{lib, config, pkgs, ...}:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 with lib;
-with lib.randomscanian;
-let
+with lib.randomscanian; let
   cfg = config.randomscanian.cli-apps.eza;
 in {
   options.randomscanian.cli-apps.eza = {
@@ -10,6 +14,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+    home.shellAliases = optionalAttrs cfg.enableAliases {llr = "ll --recurse";};
     programs.eza = {
       enable = true;
       enableAliases = true;

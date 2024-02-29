@@ -91,7 +91,7 @@ myModMask :: KeyMask
 myModMask = mod4Mask      
 
 myTerminal :: String
-myTerminal = "alacritty"  
+myTerminal = "alacritty"
 
 myBorderWidth :: Dimension
 myBorderWidth = 2         
@@ -100,10 +100,7 @@ myNormColor :: String
 myNormColor   = colorBack 
 
 myFocusColor :: String    
-myFocusColor  = color15   
-
-mySpacing' :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
-mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
+myFocusColor  = color10
 
 mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spacing l a
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
@@ -113,53 +110,19 @@ tall     = renamed [Replace "tall"]
            $ limitWindows 5
            $ smartBorders
            $ windowNavigation
-           $ addTabs shrinkText myTabTheme
            $ subLayout [] (smartBorders Simplest)
            $ mySpacing 8
            $ ResizableTall 1 (3/100) (1/2) []
-monocle  = renamed [Replace "monocle"]
-           $ smartBorders
-           $ windowNavigation
-           $ addTabs shrinkText myTabTheme
-           $ subLayout [] (smartBorders Simplest)
-           $ Full
-floats   = renamed [Replace "floats"]
-           $ smartBorders
-           $ simplestFloat
--- spirals  = renamed [Replace "spirals"]
---            $ limitWindows 9
---            $ smartBorders
---            $ windowNavigation
---            $ addTabs shrinkText myTabTheme
---            $ subLayout [] (smartBorders Simplest)
---            $ mySpacing 8
---            $ spiral (6/7)
-tabs     = renamed [Replace "tabs"]
-           $ tabbed shrinkText myTabTheme
-
--- setting colors for tabs layout and tabs sublayout.
-myTabTheme = def { fontName            = myFont
-                 , activeColor         = color15
-                 , inactiveColor       = color08
-                 , activeBorderColor   = color15
-                 , inactiveBorderColor = colorBack
-                 , activeTextColor     = colorBack
-                 , inactiveTextColor   = color16
-                 }
 
 -- The layout hook
 myLayoutHook = avoidStruts
                $ mouseResize
                $ windowArrange
-               $ T.toggleLayouts floats
                $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) myDefaultLayout
   where
     myDefaultLayout = withBorder myBorderWidth tall
-                                           ||| noBorders monocle
-                                           ||| floats
-                                           ||| noBorders tabs
 
-myWorkspaces = ["WWW","CHAT","GAME","LAUNCHER","EMULATIONS","DEV","ELSE1","ELSE2","AWAY"] 
+myWorkspaces = ["MEDIA", "CHAT", "LAUNCHER", "GAME", "DEV", "EMULATIONS", "ELSE1", "ELSE2", "AWAY"] 
 myWorkspaceIndices = M.fromList $ zipWith (,) myWorkspaces [1..] -- (,) == \x y -> (x,y)
 
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
@@ -168,22 +131,37 @@ myManageHook = composeAll
   -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
   -- I'm doing it this way because otherwise I would have to write out the full
   -- name of my workspaces and the names would be very long if using clickable workspaces.
-  [ className =? "confirm"         --> doFloat
-  , className =? "file_progress"   --> doFloat
-  , className =? "dialog"          --> doFloat
-  , className =? "download"        --> doFloat
-  , className =? "error"           --> doFloat
-  , className =? "Gimp"            --> doFloat
-  , className =? "notification"    --> doFloat
-  , className =? "pinentry-gtk-2"  --> doFloat
-  , className =? "splash"          --> doFloat
-  , className =? "toolbar"         --> doFloat
-  , className =? "Yad"             --> doCenterFloat
-  , title =? "emacs-run-launcher" --> doFloat
-  , title =? "Mozilla Firefox"     --> doShift ( myWorkspaces !! 0 )
-  , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
+  [ className =? "confirm"           --> doFloat
+  , className =? "file_progress"     --> doFloat
+  , className =? "dialog"            --> doFloat
+  , className =? "download"          --> doFloat
+  , className =? "error"             --> doFloat
+  , className =? "notification"      --> doFloat
+  , className =? "pinentry-gtk-2"    --> doFloat
+  , className =? "splash"            --> doFloat
+  , className =? "toolbar"           --> doFloat
+  , className =? "Yad"               --> doCenterFloat
+  , className =? "zenity"            --> doCenterFloat
+  
+  , className =? "yuzu" --> doShift ( myWorkspaces !! 5 )
+  , className =? "Minecraft 1.20.4" --> doShift ( myWorkspaces !! 3 )
+  , className =? "Minecraft* 1.20.1" --> doShift ( myWorkspaces !! 3 )
+  , className =? "Minecraft 1.12.2" --> doShift ( myWorkspaces !! 3 )
+  , className =? "steam_app_1086940" --> doShift ( myWorkspaces !! 3 )
+  , className =? "steam_app_405310" --> doShift ( myWorkspaces !! 3 )
+  , className =? "steam_app_0" --> doShift ( myWorkspaces !! 3 )
+  , className =? "Terraria.bin.x86_64" --> doShift ( myWorkspaces !! 3 )
+  , className =? "prismlauncher" --> doShift ( myWorkspaces !! 2 )
+  , className =? "PrismLauncher" --> doShift ( myWorkspaces !! 2 )
+  , className =? "steam" --> doShift ( myWorkspaces !! 2 )
+  , className =? "discord" --> doShift ( myWorkspaces !! 1 )
+  , title =? "Mozilla Firefox"       --> doShift ( myWorkspaces !! 0 )
+  , className =? ".blueman-manager-wrapped" --> doCenterFloat
+  , title =? "emacs-run-launcher"    --> doFloat
+  , (className =? "firefox" <&&> title =? "Extension: (Bitwarden - Free Password Manager) - Bitwarden — Mozilla Firefox") --> doFloat
+  , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat
   , isFullscreen -->  doFullFloat
-  , fmap not willFloat --> insertPosition Below Newer
+  , fmap not willFloat --> insertPosition End Newer
   ]
 
 subtitle' ::  String -> ((KeyMask, KeySym), NamedAction)
@@ -207,33 +185,7 @@ myKeys c =
   subKeys "Xmonad Essentials"
   [ ("M-S-r",        addName "Restart XMonad"         $ spawn "xmonad --restart")
   , ("M-S-q",        addName "Quit XMonad"            $ io exitSuccess)
-  , ("M-S-c",        addName "Kill focused window"    $ kill1)
-  , ("M-S-a",        addName "Kill all windows on WS" $ killAll)
-  , ("M-S-<Return>", addName "Launch terminal"        $ spawn (myTerminal))
-  , ("M-p",          addName "Run prompt"             $ spawn "dmenu")
   , ("M-S-b",        addName "Toggle bar show/hide"   $ sendMessage ToggleStruts)]
-
-  ^++^ subKeys "Switch to workspace"
-  [ ("M-1", addName "Switch to workspace 1"    $ (windows $ W.greedyView $ myWorkspaces !! 0))
-  , ("M-2", addName "Switch to workspace 2"    $ (windows $ W.greedyView $ myWorkspaces !! 1))
-  , ("M-3", addName "Switch to workspace 3"    $ (windows $ W.greedyView $ myWorkspaces !! 2))
-  , ("M-4", addName "Switch to workspace 4"    $ (windows $ W.greedyView $ myWorkspaces !! 3))
-  , ("M-5", addName "Switch to workspace 5"    $ (windows $ W.greedyView $ myWorkspaces !! 4))
-  , ("M-6", addName "Switch to workspace 6"    $ (windows $ W.greedyView $ myWorkspaces !! 5))
-  , ("M-7", addName "Switch to workspace 7"    $ (windows $ W.greedyView $ myWorkspaces !! 6))
-  , ("M-8", addName "Switch to workspace 8"    $ (windows $ W.greedyView $ myWorkspaces !! 7))
-  , ("M-9", addName "Switch to workspace 9"    $ (windows $ W.greedyView $ myWorkspaces !! 8))]
-
-  ^++^ subKeys "Send window to workspace"
-  [ ("M-S-1", addName "Send to workspace 1"    $ (windows $ W.shift $ myWorkspaces !! 0))
-  , ("M-S-2", addName "Send to workspace 2"    $ (windows $ W.shift $ myWorkspaces !! 1))
-  , ("M-S-3", addName "Send to workspace 3"    $ (windows $ W.shift $ myWorkspaces !! 2))
-  , ("M-S-4", addName "Send to workspace 4"    $ (windows $ W.shift $ myWorkspaces !! 3))
-  , ("M-S-5", addName "Send to workspace 5"    $ (windows $ W.shift $ myWorkspaces !! 4))
-  , ("M-S-6", addName "Send to workspace 6"    $ (windows $ W.shift $ myWorkspaces !! 5))
-  , ("M-S-7", addName "Send to workspace 7"    $ (windows $ W.shift $ myWorkspaces !! 6))
-  , ("M-S-8", addName "Send to workspace 8"    $ (windows $ W.shift $ myWorkspaces !! 7))
-  , ("M-S-9", addName "Send to workspace 9"    $ (windows $ W.shift $ myWorkspaces !! 8))]
 
   ^++^ subKeys "Window navigation"
   [ ("M-j", addName "Move focus to next window"                $ windows W.focusDown)
@@ -269,7 +221,7 @@ myKeys c =
   [ ("M-S-<Up>", addName "Increase clients in master pane"   $ sendMessage (IncMasterN 1))
   , ("M-S-<Down>", addName "Decrease clients in master pane" $ sendMessage (IncMasterN (-1)))
   , ("M-=", addName "Increase max # of windows for layout"   $ increaseLimit)
-  , ("M--", addName "ecrease max # of windows for layout"   $ decreaseLimit)]
+  , ("M--", addName "Decrease max # of windows for layout"   $ decreaseLimit)]
 
 main :: IO ()
 main = do
