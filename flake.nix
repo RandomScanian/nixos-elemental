@@ -140,13 +140,15 @@
 
       # Add modules to all NixOS systems.
       systems.modules.nixos = with inputs; [
+
         {
           nix.settings = {
             auto-optimise-store = true;
           };
-          nix.extraOptions = ''access-tokens = github.com=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'';
+          #nix.extraOptions = ''access-tokens = github.com=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'';
           environment.etc."sddm-theme".source = inputs.dracula-sddm;
         }
+        
         inputs.nix-ld.nixosModules.nix-ld
         inputs.sops-nix.nixosModules.sops
         "${inputs.nixos-elemental}/secrets/secrets.nix"
